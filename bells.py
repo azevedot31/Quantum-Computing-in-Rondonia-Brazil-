@@ -1,8 +1,7 @@
 from qiskit import QuantumCircuit
-from qiskit.visualization import plot_histogram
 from qiskit_aer import AerSimulator
-from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager # Otimiza o Circuito para Rodar em Hardware Real
-from qiskit_ibm_runtime import SamplerV2 as Sampler, QiskitRuntimeService # O RuntimeService faz a conexão e o Sampler roda e coleta os dados
+from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+from qiskit_ibm_runtime import SamplerV2 as Sampler, QiskitRuntimeService
 
 # Estados de Bell
 
@@ -31,7 +30,10 @@ bell_psi_minus.cx(0, 1)
 bell_psi_minus.measure_all()
 
 
-# bell.draw("mpl") # Mostrar o circuito visualmente
+print(bell_phi_plus)
+print(bell_phi_minus)
+print(bell_psi_plus)
+print(bell_psi_minus)
 
 def run_circuit_and_get_counts(circuit, backend, shots=1000):
     pm = generate_preset_pass_manager(backend=backend, optimization_level=1)
@@ -39,23 +41,21 @@ def run_circuit_and_get_counts(circuit, backend, shots=1000):
 
     sampler = Sampler(mode=backend)
     job = sampler.run([isa_circuit], shots=shots)
-    result = job.result() # Aguarda o job ter os dados
+    result = job.result()
 
-    return result[0].data.meas.get_counts() # Extrai o dicionário de contagens (quantas vezes cada resultado apareceu)
+    return result[0].data.meas.get_counts()
 
 
+# QiskitRuntimeService.save_account(
+#     channel="ibm_quantum_platform",
+#     token="vFkeYR0cFbpuERrY7cZHieexAacf_siBK_eXZ0YhyZl6",
+#     overwrite=True,
+#     set_as_default=True,
+# )
+# service = QiskitRuntimeService(channel="ibm_quantum_platform")
+# backend = service.least_busy(operational=True, simulator=False, min_num_qubits=127)
 
-# Definindo as configurações da classe
-QiskitRuntimeService.save_account(
-    channel="ibm_quantum_platform",
-    token="vFkeYR0cFbpuERrY7cZHieexAacf_siBK_eXZ0YhyZl6",
-    overwrite=True, # Sobreescreve se já tiver configurações anteriores
-    set_as_default=True, # Define essa configuração como padrão
-)
-service = QiskitRuntimeService(channel="ibm_quantum_platform") # Apenas reelembrando a configuração padrão
-
-backend = service.least_busy(operational=True, simulator=False, min_num_qubits=127)
-# backend = AerSimulator() // Para rodar no simulador
+backend = AerSimulator()
 print(backend.name)
 
 

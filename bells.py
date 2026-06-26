@@ -48,7 +48,7 @@ def run_circuit_and_get_counts(circuit, backend, shots=1000):
 
 # QiskitRuntimeService.save_account(
 #     channel="ibm_quantum_platform",
-#     token="vFkeYR0cFbpuERrY7cZHieexAacf_siBK_eXZ0YhyZl6",
+#     token="xxx",
 #     overwrite=True,
 #     set_as_default=True,
 # )
